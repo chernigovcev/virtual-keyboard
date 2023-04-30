@@ -58,6 +58,7 @@ textarea {
     padding: 10px 8px 10px 10px;
 
     border: 1px solid #222222;
+    border-radius: 10px;
 }
 
 .keyboard .row {

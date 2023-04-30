@@ -65,7 +65,9 @@ const KEY_RUS_SHIFT_CAPS = [    ['Ё', '!', '"', '№', ';', '%', ':', '?', '*',
                                 ['Ctrl', 'Win', 'Alt', ' ', 'Alt', '◄', '▼', '►', 'Ctrl',]
                             ];
                     
-
+let capsOn = false;
+let ctrlLeft = false;
+let altLeft = false;
                 
               
 // create container
@@ -86,6 +88,7 @@ textArea.className = 'textarea';
 textArea.id = 'textarea';
 textArea.rows = 5;
 textArea.cols = 50;
+textArea.placeholder = 'переключение языка ввода: левый Ctrl + левый Alt';
 
 
 function createKeyboard() {
@@ -166,20 +169,14 @@ function createKeyboard() {
 
 createKeyboard();
 
-let capsOn = false;
-let ctrlLeft = false;
-let altLeft = false;
 
 document.addEventListener('keydown', function(event) {
 
     event.preventDefault();
-    
+
     const key = event.key;
     const keyCode = event.code;
     const keyStyle = document.querySelector(`.${keyCode}`);
-    const rusLang = document.querySelectorAll('.rus');
-    const engLang = document.querySelectorAll('.eng');
-
     const rus = document.querySelector(`.${keyCode} > .rus:not(.hidden)`);
     const eng = document.querySelector(`.${keyCode} > .eng:not(.hidden)`);
 
@@ -196,67 +193,35 @@ document.addEventListener('keydown', function(event) {
 
     if (key == 'Shift' && capsOn == true) {
 
-        for (let item of CASE_DOWN) {
-            item.classList.add('hidden');
-        }
-        for (let item of CASE_UP) {
-            item.classList.add('hidden');
-        }
-        for (let item of CAPS) {
-            item.classList.add('hidden');
-        }
-        for (let item of SHIFT_CAPS) {
-            item.classList.remove('hidden');
-        }
+        CASE_DOWN.forEach(item => item.classList.add('hidden'));
+        CASE_UP.forEach(item => item.classList.add('hidden'));
+        CAPS.forEach(item => item.classList.add('hidden'));
+        SHIFT_CAPS.forEach(item => item.classList.remove('hidden'));
 
     } else if (key == 'Shift' && capsOn == false) {
 
-        for (let item of CASE_DOWN) {
-            item.classList.add('hidden');
-        }
-        for (let item of CASE_UP) {
-            item.classList.remove('hidden');
-        }
-        for (let item of CAPS) {
-            item.classList.add('hidden');
-        }
-        for (let item of SHIFT_CAPS) {
-            item.classList.add('hidden');
-        }
+        CASE_DOWN.forEach(item => item.classList.add('hidden'));
+        CASE_UP.forEach(item => item.classList.remove('hidden'));
+        CAPS.forEach(item => item.classList.add('hidden'));
+        SHIFT_CAPS.forEach(item => item.classList.add('hidden'));
 
     } else if (key == 'CapsLock' && capsOn == false) {
 
         capsOn = true;
 
-        for (let item of CASE_DOWN) {
-            item.classList.add('hidden');
-        }
-        for (let item of CASE_UP) {
-            item.classList.add('hidden');
-        }
-        for (let item of CAPS) {
-            item.classList.remove('hidden');
-        }
-        for (let item of SHIFT_CAPS) {
-            item.classList.add('hidden');
-        }
+        CASE_DOWN.forEach(item => item.classList.add('hidden'));
+        CASE_UP.forEach(item => item.classList.add('hidden'));
+        CAPS.forEach(item => item.classList.remove('hidden'));
+        SHIFT_CAPS.forEach(item => item.classList.add('hidden'));
 
     } else if (key == 'CapsLock' && capsOn == true) {
 
         capsOn = false;
 
-        for (let item of CASE_DOWN) {
-            item.classList.remove('hidden');
-        }
-        for (let item of CASE_UP) {
-            item.classList.add('hidden');
-        }
-        for (let item of CAPS) {
-            item.classList.add('hidden');
-        }
-        for (let item of SHIFT_CAPS) {
-            item.classList.add('hidden');
-        } 
+        CASE_DOWN.forEach(item => item.classList.remove('hidden'));
+        CASE_UP.forEach(item => item.classList.add('hidden'));
+        CAPS.forEach(item => item.classList.add('hidden'));
+        SHIFT_CAPS.forEach(item => item.classList.add('hidden'));
 
     } else if (key == 'Backspace') {
 
@@ -278,13 +243,12 @@ document.addEventListener('keydown', function(event) {
     } else if (key != 'Control' && key != 'Alt' && key != 'Meta') {
 
         if (rus) {
-            textArea.innerHTML += keyRusValue.textContent;
+            textArea.innerHTML += keyRusValue.innerHTML;
         } else if (eng) {
-            textArea.innerHTML += keyEngValue.textContent;
+            textArea.innerHTML += keyEngValue.innerHTML;
         }
 
     };
-    
     
     if (keyCode == 'ControlLeft') {
         ctrlLeft = true;
@@ -292,13 +256,9 @@ document.addEventListener('keydown', function(event) {
         altLeft = true;
     };
 
-    if (ctrlLeft == true && altLeft == true) {
-        for (let item of rusLang) {
-            item.classList.toggle('hidden');
-        }
-        for (let item of engLang) {
-            item.classList.toggle('hidden');
-        } 
+    if (ctrlLeft && altLeft) {
+        document.querySelectorAll('.rus').forEach(item => item.classList.toggle('hidden'));
+        document.querySelectorAll('.eng').forEach(item => item.classList.toggle('hidden'));
     } 
 
     keyStyle.classList.toggle('active');
@@ -317,33 +277,18 @@ document.addEventListener('keyup', function(event) {
 
     if (key == 'Shift' && capsOn == true) {
 
-        for (let item of CASE_DOWN) {
-            item.classList.add('hidden');
-        }
-        for (let item of CASE_UP) {
-            item.classList.add('hidden');
-        }
-        for (let item of CAPS) {
-            item.classList.remove('hidden');
-        }
-        for (let item of SHIFT_CAPS) {
-            item.classList.add('hidden');
-        }
+        CASE_DOWN.forEach(item => item.classList.add('hidden'));
+        CASE_UP.forEach(item => item.classList.add('hidden'));
+        CAPS.forEach(item => item.classList.remove('hidden'));
+        SHIFT_CAPS.forEach(item => item.classList.add('hidden'));
 
     } else if (key == 'Shift' && capsOn == false) {
 
-        for (let item of CASE_DOWN) {
-            item.classList.remove('hidden');
-        }
-        for (let item of CASE_UP) {
-            item.classList.add('hidden');
-        }
-        for (let item of CAPS) {
-            item.classList.add('hidden');
-        }
-        for (let item of SHIFT_CAPS) {
-            item.classList.add('hidden');
-        }
+        CASE_DOWN.forEach(item => item.classList.remove('hidden'));
+        CASE_UP.forEach(item => item.classList.add('hidden'));
+        CAPS.forEach(item => item.classList.add('hidden'));
+        SHIFT_CAPS.forEach(item => item.classList.add('hidden'));
+
         keyStyle.classList.remove('active');
 
     } else if (key == 'CapsLock') {
@@ -357,11 +302,15 @@ document.addEventListener('keyup', function(event) {
 
 });
 
-const divTitle = document.createElement('div');
-container.append(divTitle);
-divTitle.className = 'language-container';
+document.addEventListener('mousedown', function(event) {
+    console.log(event);
+});
+document.addEventListener('mouseup', function(event) {
+    console.log(event);
+});
 
-const language = document.createElement('p');
-divTitle.append(language);
-language.className = 'language';
-language.innerText = '↖ rus/eng ↗';
+textArea.addEventListener('click', function(event) {
+    const clickPosition = event.clientX - textArea.getBoundingClientRect().left;
+    textArea.selectionStart = clickPosition;
+    textArea.selectionEnd = clickPosition;
+  });
