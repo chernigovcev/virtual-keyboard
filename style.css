@@ -12,12 +12,14 @@ textarea {
 
 .textarea {
     display: block;
-    width: 824px;
+    width: 822px;
     height: 200px;
     margin: 10px auto 10px;
     padding: 10px;
     font-size: 18px;
-    color: #444444
+    color: #444444;
+
+    border-radius: 10px;
 }
 
 .caseDown,
