@@ -69,6 +69,7 @@ let capsOn = false;
 let ctrlLeft = false;
 let altLeft = false;
                 
+let lang;
               
 // create container
 const container = document.createElement('div')
@@ -90,8 +91,20 @@ textArea.rows = 5;
 textArea.cols = 50;
 textArea.placeholder = 'переключение языка ввода: левый Ctrl + левый Alt';
 
+function setLocalStorage() {
+    localStorage.setItem('lang', lang);
+}
+window.addEventListener('beforeunload', setLocalStorage)
 
-function createKeyboard() {
+function getLocalStorage() {
+    if(localStorage.getItem('lang')) {
+        lang = localStorage.getItem('lang');
+    }
+}
+window.addEventListener('load', getLocalStorage)
+
+
+function createKeyboard(language) {
 
     // create keybourd
     const bodyKeyboard = document.createElement("div");
@@ -110,10 +123,9 @@ function createKeyboard() {
             bodyRow.append(bodyKey);
             bodyKey.className = `key ${KEY_COUNT_ROW[n][i]}`;
 
-
             const spanRus = document.createElement('span');
             bodyKey.append(spanRus);
-            spanRus.className = `rus hidden`;
+            // spanRus.className = `rus hidden`;
 
             for (let y = 0; y < 4; y++) {
                 const spanChange = document.createElement('span');
@@ -139,7 +151,7 @@ function createKeyboard() {
 
             const spanEng = document.createElement('span');
             bodyKey.append(spanEng);
-            spanEng.className = `eng`;
+            // spanEng.className = `eng`;
 
             for (let y = 0; y < 4; y++) {
                 const spanChange = document.createElement('span');
@@ -162,12 +174,35 @@ function createKeyboard() {
                     spanChange.className = `${KEY_CHANGE[y]} hidden`;
                 }
             }
+
+            setTimeout(() => {
+                if (lang == 'rus') {
+                    console.log('RUS')
+                    spanRus.className = `rus`;
+                    spanEng.className = `eng hidden`;
+    
+                } else if (lang == 'eng') {
+                    console.log('ENG')
+                    spanRus.className = `rus hidden`;
+                    spanEng.className = `eng`;
+    
+                } else {
+                    console.log(`AAA ${lang} ${language}`);
+    
+                    // lang = 'eng'
+                    spanRus.className = `rus hidden`;
+                    spanEng.className = `eng`;
+    
+                }
+              }, "500");
+
+
         }
     }
   
 }
 
-createKeyboard();
+createKeyboard(lang);
 
 const KEY = document.querySelectorAll('.key');
 
@@ -373,6 +408,13 @@ document.addEventListener('keydown', function(event) {
     };
 
     if (ctrlLeft && altLeft) {
+        if (lang == 'rus') {
+            lang = 'eng';
+        } else if (lang == 'eng') {
+            lang = 'rus'
+        } else {
+            lang = 'eng';
+        }
         document.querySelectorAll('.rus').forEach(item => item.classList.toggle('hidden'));
         document.querySelectorAll('.eng').forEach(item => item.classList.toggle('hidden'));
     } 
