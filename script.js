@@ -169,6 +169,122 @@ function createKeyboard() {
 
 createKeyboard();
 
+const KEY = document.querySelectorAll('.key');
+
+for(let key of KEY){
+
+    const CASE_DOWN = document.querySelectorAll('.caseDown');
+    const CASE_UP = document.querySelectorAll('.caseUp');
+    const CAPS = document.querySelectorAll('.caps');
+    const SHIFT_CAPS = document.querySelectorAll('.shiftCaps');
+
+    key.addEventListener('mousedown', function(event) {
+
+        const rus = key.querySelector(`.rus:not(.hidden)`);
+        const eng = key.querySelector(`.eng:not(.hidden)`);
+    
+        const keyEngValue = key.querySelector(`.eng > :not(.hidden)`);
+        const keyRusValue = key.querySelector(`.rus > :not(.hidden)`);
+
+
+        if (key.classList.contains('ShiftLeft') && capsOn == true || key.classList.contains('ShiftRight') && capsOn == true) {
+
+            CASE_DOWN.forEach(item => item.classList.add('hidden'));
+            CASE_UP.forEach(item => item.classList.add('hidden'));
+            CAPS.forEach(item => item.classList.add('hidden'));
+            SHIFT_CAPS.forEach(item => item.classList.remove('hidden'));
+    
+        } else if (key.classList.contains('ShiftLeft') && capsOn == false || key.classList.contains('ShiftRight') && capsOn == false) {
+    
+            CASE_DOWN.forEach(item => item.classList.add('hidden'));
+            CASE_UP.forEach(item => item.classList.remove('hidden'));
+            CAPS.forEach(item => item.classList.add('hidden'));
+            SHIFT_CAPS.forEach(item => item.classList.add('hidden'));
+    
+        } else if (key.classList.contains('CapsLock') && capsOn == false) {
+    
+            capsOn = true;
+    
+            CASE_DOWN.forEach(item => item.classList.add('hidden'));
+            CASE_UP.forEach(item => item.classList.add('hidden'));
+            CAPS.forEach(item => item.classList.remove('hidden'));
+            SHIFT_CAPS.forEach(item => item.classList.add('hidden'));
+    
+        } else if (key.classList.contains('CapsLock') && capsOn == true) {
+    
+            capsOn = false;
+    
+            CASE_DOWN.forEach(item => item.classList.remove('hidden'));
+            CASE_UP.forEach(item => item.classList.add('hidden'));
+            CAPS.forEach(item => item.classList.add('hidden'));
+            SHIFT_CAPS.forEach(item => item.classList.add('hidden'));
+
+    
+        } else if (key.classList.contains('Backspace')) {
+
+            textArea.innerHTML = textArea.innerHTML.slice(textArea.selectionStart, -1);
+    
+        } else if (key.classList.contains('Enter')) {
+    
+            textArea.innerHTML += '\n';
+    
+        } else if (key.classList.contains('Tab')) {
+    
+            event.preventDefault();
+            textArea.innerHTML += '\t';
+    
+        } else if (key.classList.contains('Delete')) {
+    
+            textArea.innerHTML.slice(0, textArea.selectionStart) + textArea.innerHTML.slice(textArea.selectionStart - 1);
+    
+        } else if (!key.classList.contains('ControlLeft') && !key.classList.contains('ControlRight') && !key.classList.contains('AltLeft') && !key.classList.contains('AltRight') && !key.classList.contains('MetaLeft')) {
+    
+            if (rus) {
+                textArea.textContent += keyRusValue.textContent;
+            } else if (eng) {
+                textArea.textContent += keyEngValue.textContent;
+            }
+    
+        };
+    
+        key.classList.toggle('active');
+      });
+
+    key.addEventListener('mouseup', function(event){
+
+        const CASE_DOWN = document.querySelectorAll('.caseDown');
+        const CASE_UP = document.querySelectorAll('.caseUp');
+        const CAPS = document.querySelectorAll('.caps');
+        const SHIFT_CAPS = document.querySelectorAll('.shiftCaps');
+    
+    
+        if (key.classList.contains('ShiftLeft') && capsOn == true || key.classList.contains('ShiftRight') && capsOn == true) {
+    
+            CASE_DOWN.forEach(item => item.classList.add('hidden'));
+            CASE_UP.forEach(item => item.classList.add('hidden'));
+            CAPS.forEach(item => item.classList.remove('hidden'));
+            SHIFT_CAPS.forEach(item => item.classList.add('hidden'));
+
+            key.classList.remove('active');
+    
+        } else if (key.classList.contains('ShiftLeft') && capsOn == false || key.classList.contains('ShiftRight') && capsOn == false) {
+    
+            CASE_DOWN.forEach(item => item.classList.remove('hidden'));
+            CASE_UP.forEach(item => item.classList.add('hidden'));
+            CAPS.forEach(item => item.classList.add('hidden'));
+            SHIFT_CAPS.forEach(item => item.classList.add('hidden'));
+    
+            key.classList.remove('active');
+    
+        } else if (key.classList.contains('CapsLock')) {
+    
+        } else {
+            key.classList.remove('active');
+        }
+
+    });
+};
+
 
 document.addEventListener('keydown', function(event) {
 
@@ -243,9 +359,9 @@ document.addEventListener('keydown', function(event) {
     } else if (key != 'Control' && key != 'Alt' && key != 'Meta') {
 
         if (rus) {
-            textArea.innerHTML += keyRusValue.innerHTML;
+            textArea.textContent += keyRusValue.textContent;
         } else if (eng) {
-            textArea.innerHTML += keyEngValue.innerHTML;
+            textArea.textContent += keyEngValue.textContent;
         }
 
     };
@@ -282,6 +398,8 @@ document.addEventListener('keyup', function(event) {
         CAPS.forEach(item => item.classList.remove('hidden'));
         SHIFT_CAPS.forEach(item => item.classList.add('hidden'));
 
+        keyStyle.classList.remove('active');
+
     } else if (key == 'Shift' && capsOn == false) {
 
         CASE_DOWN.forEach(item => item.classList.remove('hidden'));
@@ -301,16 +419,3 @@ document.addEventListener('keyup', function(event) {
     altLeft = false;
 
 });
-
-document.addEventListener('mousedown', function(event) {
-    console.log(event);
-});
-document.addEventListener('mouseup', function(event) {
-    console.log(event);
-});
-
-textArea.addEventListener('click', function(event) {
-    const clickPosition = event.clientX - textArea.getBoundingClientRect().left;
-    textArea.selectionStart = clickPosition;
-    textArea.selectionEnd = clickPosition;
-  });
